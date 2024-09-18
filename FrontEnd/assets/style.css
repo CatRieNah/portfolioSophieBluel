@@ -125,6 +125,27 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
+/* Filtres par Ctégories*/
+#portfolio ul{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	color:#1D6154;
+	margin-bottom: 35px;
+}
+#portfolio li{
+	font-family: Syne;
+	font-size: 16px;
+	font-weight: 700;
+	border: 1px solid #1D6154;
+	padding: 10px 20px;
+	border-radius: 60px;
+}
+#portfolio li:hover{
+	background-color: #1D6154;
+	color: #fff;
+}
 .gallery {
 	width: 100%;
 	display: grid;
