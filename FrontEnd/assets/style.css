@@ -290,5 +290,12 @@ footer li{
 	text-decoration:underline;
 	text-align: center;
 }
+#login .error_message{
+	text-align: center;
+	color: red;
+}
+#login .error_input{
+	border:1px solid red;
+}
 
 
