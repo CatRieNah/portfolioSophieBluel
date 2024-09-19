@@ -91,7 +91,6 @@ async function eventFilter() {
     const categories = await getCategories()
     const works = await getWorks()
     const liCatAll = document.querySelectorAll("#portfolio li")
-    console.log(liCatAll)
     liCatAll.forEach(liCat => {
         liCat.addEventListener("click", (event)=>{
             gallery.innerHTML = ""
