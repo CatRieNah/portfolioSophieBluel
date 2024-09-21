@@ -10,15 +10,20 @@
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
 	<script src="https://kit.fontawesome.com/2fda15efa0.js" crossorigin="anonymous"></script>
-	<script src="js/index.js" defer></script>
+	<script type="module" src="js/index.js" defer></script>
+	<script type="module" src="js/modal.js" defer></script>
 </head>
 <body>
+	<div class="edit">
+		<i class="fa-regular fa-pen-to-square"></i>
+		<p>Mode édition</p>
+	</div>
 	<header>
 		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 		<nav>
 			<ul>
 				<li>
-					<a href="#projet">Projet</a>
+					<a href="#portfolio">Projet</a>
 				</li>
 				<li>
 					<a href="#contact">Contact</a>
@@ -47,9 +52,24 @@
 			</article>
 		</section>
 		<section id="portfolio">
-			<h2>Mes Projets</h2>
+			<div class="edit-modif">
+				<h2>Mes Projets</h2>
+				<div class="modif">
+					<i class="fa-regular fa-pen-to-square"></i>
+					<p>Modifier</p>
+				</div>
+			</div>
+			<aside class="modal-container" aria-hidden="true">
+				<div class= "modal-wrapper">
+					<span><i class="fa-solid fa-xmark"></i></span>
+					<h3>Galerie photo</h3>
+					<div class="gallery-modal">
+					</div>
+					<hr>
+					<button>Ajouter une photo</button>
+				</div>
+			</aside>
 			<div class="gallery">
-
 			</div>
 		</section>
 		<section id="contact">

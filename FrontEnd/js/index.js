@@ -8,7 +8,7 @@ li.textContent = "Tous"
 ul.appendChild(li)
 
 //Récupération des travaux depuis le backend
-async function getWorks() {
+export async function getWorks() {
     try {
         //appel fetch pour récupérer les données 
         const response = await fetch("http://localhost:5678/api/works")
@@ -23,7 +23,7 @@ async function getWorks() {
     }
 }
 //Affichage des travaux par JS
-async function displayWorks() {
+async function displayWorks(container) {
     const works = await getWorks()
     works.forEach(work => {
         const figure = document.createElement("figure")
@@ -34,10 +34,10 @@ async function displayWorks() {
         figcaption.textContent = work.title
         figure.appendChild(img)
         figure.appendChild(figcaption)
-        gallery.appendChild(figure)
+        container.appendChild(figure)
     });
 }
-displayWorks()
+displayWorks(gallery)
 // Récupération des catégories via les données récues, j'ai fais pour apprehender l'utilsation de set 
 /*async function getCategories() {
     const works = await getWorks()
@@ -116,5 +116,19 @@ async function eventFilter() {
     });
 }
 eventFilter()
+//Lorque l'utilisateur est connécté
+function connectingUsers(){
+    const token = window.localStorage.getItem("token")
+    if(token){
+        document.querySelector(".edit").style.display = "flex"
+        document.querySelector("nav li:nth-child(3)").textContent = "logout"
+        document.querySelector(".modif").style.display = "flex"
+        document.querySelector("nav li:nth-child(3)").addEventListener("click",()=>{
+            window.localStorage.removeItem("token");
+            window.location.href = "./login/login.html"
+        })
+    }
+} 
+connectingUsers()
 
 
