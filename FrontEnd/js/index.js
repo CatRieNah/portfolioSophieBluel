@@ -23,7 +23,7 @@ export async function getWorks() {
     }
 }
 //Affichage des travaux par JS
-async function displayWorks(container) {
+async function displayWorks() {
     const works = await getWorks()
     works.forEach(work => {
         const figure = document.createElement("figure")
@@ -34,7 +34,7 @@ async function displayWorks(container) {
         figcaption.textContent = work.title
         figure.appendChild(img)
         figure.appendChild(figcaption)
-        container.appendChild(figure)
+        gallery.appendChild(figure)
     });
 }
 displayWorks(gallery)
