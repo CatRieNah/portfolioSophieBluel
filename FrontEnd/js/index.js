@@ -27,6 +27,7 @@ async function displayWorks() {
     const works = await getWorks()
     works.forEach(work => {
         const figure = document.createElement("figure")
+        figure.id = work.id
         const img = document.createElement("img")
         img.src = work.imageUrl
         img.alt = work.title
@@ -102,6 +103,7 @@ async function eventFilter() {
                 // créer les éléments pour afficher les travaux filtrés
                 workFiltered.forEach(work=> {
                     const figure = document.createElement("figure")
+                    figure.id = work.id
                     const img = document.createElement("img")
                     img.src = work.imageUrl
                     img.alt = work.title

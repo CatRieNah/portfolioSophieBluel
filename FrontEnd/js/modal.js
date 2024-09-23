@@ -7,6 +7,7 @@ async function displayGalleryModal(){
     const works = await getWorks()
     works.forEach(work => {
         const figure = document.createElement("figure")
+        figure.id = work.id
         const img = document.createElement("img")
         img.src = work.imageUrl
         img.alt = work.title
@@ -32,10 +33,46 @@ modalContainer.addEventListener("click",(event)=>{
 
     }
 })
-
-//Suppression des travaux 
-async function deleteWork(){
+//Suppression des travaux
+const token = window.localStorage.getItem("token")
+console.log(token)
+async function deleteWorks(){
     await displayGalleryModal()
+    const trashAll = document.querySelectorAll(".fa-trash-can")
+    trashAll.forEach(trash => {
+        trash.addEventListener("click",async (event)=>{
+            console.log(event.target.id)
+            const trashId = event.target.id
+            if(trashId){
+                const response = await fetch(`http://localhost:5678/api/works/${trashId}`,{
+                    method: "DELETE",
+                    headers: {"Authorization": `Bearer ${token} `}
+                })
+                if(response.ok){
+                   console.log("image supprimée")
+                   // Suppression dans la modale
+                    const figureModal = document.querySelectorAll(".gallery-modal figure");
+                    figureModal.forEach(figure => {
+                        if (figure.id === trashId) {
+                            figure.remove(); // Supprimer dans la modale
+                        }
+                    })
 
+                    // Suppression dans la galerie principale
+                    const figureGallery = document.querySelectorAll(".gallery figure");
+                    figureGallery.forEach(figure => {
+                        if (figure.id === trashId) {
+                            figure.remove(); // Supprimer dans la galerie principale
+                        }
+                    })
+                }else{
+                    console.error("Echec de suppression de l'image")
+                }
+            }else{
+                console.error("L'élément cliqué n'a pas d'id")
+            }
+        })
+    })
 }
-deleteWork()
+deleteWorks()
+
