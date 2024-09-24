@@ -25,6 +25,7 @@ async function displayGalleryModal(){
 //Afficher la fenêtre modale
 modifEvent.addEventListener("click",()=>{
     modalContainer.style.display = "flex"
+    
 })
 // fermer la fenetre modale
 modalContainer.addEventListener("click",(event)=>{
