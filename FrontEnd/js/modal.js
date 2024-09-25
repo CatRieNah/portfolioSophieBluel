@@ -50,6 +50,22 @@ arrowLeft.addEventListener("click",()=>{
     listGallery.style.display = "block"
     uploadGallery.style.display = "none"
 })
+// Ajout des catégories dans la balise select
+const select = document.querySelector(".upload_gallery form select")
+//Lorsque je fais addeventlistner sur select, il faut cliquer 3 fois pour afficher toutes les catégories, j'ai essayé si ça marche avec le clic sur modifier pour avancer l'affichage des catégories 
+modifEvent.addEventListener("click",()=>{
+    createOptionsSelect()
+})
+async function createOptionsSelect() {
+    const categories = await getCategories()
+    categories.forEach(category => {
+        const option = document.createElement("option")
+        option.value = category.id
+        option.textContent = category.name
+        select.appendChild(option)
+    });
+}
+
 //Suppression des travaux
 const token = window.localStorage.getItem("token")
 console.log(token)
@@ -92,20 +108,28 @@ async function deleteWorks(){
     })
 }
 deleteWorks()
-
-// Ajout des catégories dans la balise select
-const select = document.querySelector(".upload_gallery form select")
-//Lorsque je fais addeventlistner sur select, il faut clicquer 3 fois pour afficher toutes les catégories, j'ai essayé si ça marche avec le bouton modifier pour avancer l'affichage des catégories 
-modifEvent.addEventListener("click",()=>{
-    createOptionsSelect()
+//Ajout des photos (A BIEN MAITRISER)
+const inputFile = document.querySelector("input[type='file']")
+//Ajout eventlistener lorsque l'utilisateur charge une image dans l'input
+inputFile.addEventListener("change",(event)=>{
+    const image = inputFile.files[0] // récupérer le premier image
+    if(image){
+        //creation d'une balise img
+        const img = document.createElement("img")
+        img.alt = image.name
+        //lire le fichier
+        const reader = new FileReader()
+        //Affichage de l'image
+        reader.onload = function(event){
+            img.src = event.target.result
+            const addGallery = document.querySelector(".add_gallery")
+            addGallery.appendChild(img)
+            document.querySelector(".add_gallery span").style.display = "none"
+            document.querySelector(".add_gallery label").style.display = "none"
+            document.querySelector(".add_gallery p").style.display = "none"
+        }
+        reader.readAsDataURL(image)
+    }
 })
-async function createOptionsSelect() {
-    const categories = await getCategories()
-    categories.forEach(category => {
-        const option = document.createElement("option")
-        option.value = category.id
-        option.textContent = category.name
-        select.appendChild(option)
-        console.log(option)
-    });
-}
+
+
