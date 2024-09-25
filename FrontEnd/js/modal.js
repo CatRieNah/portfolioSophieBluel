@@ -2,7 +2,10 @@ import { getWorks } from "./index.js"
 const galleryModal = document.querySelector(".gallery-modal")
 const modifEvent = document.querySelector(".modif")
 const modalContainer = document.querySelector(".modal-container")
-const modalWrapper = document.querySelector(".modal-wrapper")
+const listGallery = document.querySelector(".list_gallery")
+const buttonInListGallery = document.querySelector(".list_gallery button")
+const uploadGallery = document.querySelector(".upload_gallery")
+const arrowLeft = document.querySelector(".fa-arrow-left")
 async function displayGalleryModal(){
     const works = await getWorks()
     works.forEach(work => {
@@ -22,17 +25,29 @@ async function displayGalleryModal(){
     });
 }
 
-//Afficher la fenêtre modale
+//Ouvrir la fenêtre modale gallerie
 modifEvent.addEventListener("click",()=>{
-    modalContainer.style.display = "flex"
-    
+    modalContainer.style.display ="flex"
 })
-// fermer la fenetre modale
+//ouvrir la fenêtre Ajout photo
+buttonInListGallery.addEventListener("click",()=>{
+    uploadGallery.style.display = "flex"
+    listGallery.style.display = "none"
+})
+//fermeture de la modale
 modalContainer.addEventListener("click",(event)=>{
-    if(event.target.classList.contains("modal-container")|| event.target.classList.contains("fa-xmark")){
-        modalContainer.style.display = "none"
+    if (event.target.classList.contains("fa-xmark") || event.target.classList.contains("modal-container")) {
+        modalContainer.style.display = "none";
 
+        // Réinitialise l'affichage des galeries pour la prochaine ouverture
+        uploadGallery.style.display = "none"; // Cache la section d'ajout de photo
+        listGallery.style.display = "block"; // Affiche la liste de la galerie
     }
+})
+// Retour sur la modale liste photo
+arrowLeft.addEventListener("click",()=>{
+    listGallery.style.display = "block"
+    uploadGallery.style.display = "none"
 })
 //Suppression des travaux
 const token = window.localStorage.getItem("token")

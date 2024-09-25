@@ -246,6 +246,10 @@ hr{
 .fa-arrow-left{
 	font-size: 21px;
 }
+.upload_gallery{
+	display: none;
+	flex-direction: column ;
+}
 
 .add_gallery{
 	background-color: #E8F1F6;
@@ -272,7 +276,8 @@ hr{
 	border-radius: 50px;
 	font-weight: 500;
 	color: #306685;
-	padding:10px
+	padding:10px;
+	cursor: pointer;
 }
 .add_gallery p{
 	font-size: 10px;
@@ -287,6 +292,10 @@ hr{
 }
 .upload_gallery hr{
 	margin: 60px 0 0 0;
+}
+.fa-arrow-left{
+	position: relative;
+	top: 20px
 }
 
 /* Filtres par Catégories*/
