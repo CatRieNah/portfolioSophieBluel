@@ -1,4 +1,5 @@
 import { getWorks } from "./index.js"
+import { getCategories } from "./index.js"
 const galleryModal = document.querySelector(".gallery-modal")
 const modifEvent = document.querySelector(".modif")
 const modalContainer = document.querySelector(".modal-container")
@@ -92,3 +93,19 @@ async function deleteWorks(){
 }
 deleteWorks()
 
+// Ajout des catégories dans la balise select
+const select = document.querySelector(".upload_gallery form select")
+//Lorsque je fais addeventlistner sur select, il faut clicquer 3 fois pour afficher toutes les catégories, j'ai essayé si ça marche avec le bouton modifier pour avancer l'affichage des catégories 
+modifEvent.addEventListener("click",()=>{
+    createOptionsSelect()
+})
+async function createOptionsSelect() {
+    const categories = await getCategories()
+    categories.forEach(category => {
+        const option = document.createElement("option")
+        option.value = category.id
+        option.textContent = category.name
+        select.appendChild(option)
+        console.log(option)
+    });
+}

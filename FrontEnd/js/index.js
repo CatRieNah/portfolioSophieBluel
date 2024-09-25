@@ -62,7 +62,7 @@ displayWorks(gallery)
     return categories
 }*/
 // Récupération de catégories via API
-async function getCategories() {
+ export async function getCategories() {
     try {
         //appel fetch pour récupérer les données 
         const response = await fetch("http://localhost:5678/api/categories")
