@@ -109,27 +109,44 @@ async function deleteWorks(){
 }
 deleteWorks()
 //Ajout des photos (A BIEN MAITRISER)
-const inputFile = document.querySelector("input[type='file']")
-//Ajout eventlistener lorsque l'utilisateur charge une image dans l'input
-inputFile.addEventListener("change",(event)=>{
-    const image = inputFile.files[0] // récupérer le premier image
-    if(image){
-        //creation d'une balise img
-        const img = document.createElement("img")
-        img.alt = image.name
-        //lire le fichier
-        const reader = new FileReader()
-        //Affichage de l'image
-        reader.onload = function(event){
-            img.src = event.target.result
-            const addGallery = document.querySelector(".add_gallery")
-            addGallery.appendChild(img)
-            document.querySelector(".add_gallery span").style.display = "none"
-            document.querySelector(".add_gallery label").style.display = "none"
-            document.querySelector(".add_gallery p").style.display = "none"
-        }
-        reader.readAsDataURL(image)
-    }
-})
+document.addEventListener("DOMContentLoaded", function() {
+    // Sélectionner le champ de fichier
+    const inputFile = document.querySelector(".add_gallery input[type='file']");
 
+    // Ajouter l'événement change pour le champ de fichier
+    inputFile.addEventListener("change", insertImages);
+
+    function insertImages() {
+        const files = inputFile.files; // Récupérer tous les fichiers sélectionnés
+
+        if (files.length > 0) {
+            // Parcourir tous les fichiers sélectionnés
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i]; // Fichier actuel
+                const reader = new FileReader(); // Créer un nouveau FileReader pour chaque fichier
+
+                // Lorsqu'un fichier est chargé
+                reader.onload = function(event) {
+                    // Créer un élément img
+                    const image = document.createElement("img");
+                    image.src = event.target.result; // Utiliser le résultat de FileReader
+                    image.style.width = "100%"; // Ajuster la taille de l'image
+
+                    // Ajouter l'image à la galerie
+                    const gallery = document.querySelector(".add_gallery");
+                    gallery.appendChild(image);
+                };
+
+                // Lire le fichier sélectionné
+                reader.readAsDataURL(file); // Lire le fichier en tant que Data URL
+            }
+
+            // Cacher les éléments inutiles après la sélection
+            document.querySelector(".fa-image").style.display = "none"
+            document.querySelector(".add_gallery label").style.display = "none";
+            document.querySelector(".add_gallery input[type='file']").style.display = "none";
+            document.querySelector(".add_gallery p").style.display = "none";
+        }
+    }
+});
 
