@@ -23,7 +23,7 @@ export async function getWorks() {
     }
 }
 //Affichage des travaux par JS
-async function displayWorks() {
+ export async function displayWorks() {
     const works = await getWorks()
     works.forEach(work => {
         const figure = document.createElement("figure")
@@ -37,6 +37,9 @@ async function displayWorks() {
         figure.appendChild(figcaption)
         gallery.appendChild(figure)
     });
+}
+function createFigureGallery(work){
+
 }
 displayWorks(gallery)
 // Récupération des catégories via les données récues, j'ai fais pour apprehender l'utilsation de set 

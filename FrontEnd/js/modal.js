@@ -1,5 +1,6 @@
 import { getWorks } from "./index.js"
 import { getCategories } from "./index.js"
+import { displayWorks } from "./index.js"
 const galleryModal = document.querySelector(".gallery-modal")
 const modifEvent = document.querySelector(".modif")
 const modalContainer = document.querySelector(".modal-container")
@@ -8,6 +9,7 @@ const buttonInListGallery = document.querySelector(".list_gallery button")
 const uploadGallery = document.querySelector(".upload_gallery")
 const arrowLeft = document.querySelector(".fa-arrow-left")
 async function displayGalleryModal(){
+    galleryModal.innerHTML =""
     const works = await getWorks()
     works.forEach(work => {
         const figure = document.createElement("figure")
@@ -70,6 +72,7 @@ async function createOptionsSelect() {
 const token = window.localStorage.getItem("token")
 console.log(token)
 async function deleteWorks(){
+
     await displayGalleryModal()
     const trashAll = document.querySelectorAll(".fa-trash-can")
     trashAll.forEach(trash => {
@@ -149,4 +152,36 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 });
+//Ajout Image 
+const formUpload = document.querySelector(".upload_gallery form")
+formUpload.addEventListener("submit",(event)=>{
+    event.preventDefault()
+    addPicture()
+})
+async function addPicture() {
+    try {
+        const formData = new FormData(formUpload)
+        const title = document.getElementById("title").value
+        const category = document.getElementById("category").value
+        const image = document.getElementById("image").files.length
+        if(title && category && image){
+            const response = await fetch("http://localhost:5678/api/works", {
+                method: "POST",
+                headers: { "Authorization": `Bearer ${token}` },
+                body: formData,
+            })
+            if(response.ok){
+                const data = await response.json()
+                console.log(data)
+                document.querySelector(".add_gallery").innerHTML = ""
+                displayGalleryModal()
+                displayWorks()
+                document.querySelector(".list_gallery button").style.color ="green"
 
+            }
+        }
+
+    } catch (error) {
+        
+    }
+}
