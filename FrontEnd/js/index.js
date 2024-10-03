@@ -25,6 +25,7 @@ export async function getWorks() {
 //Affichage des travaux par JS
  export async function displayWorks() {
     const works = await getWorks()
+    gallery.innerHTML = ""
     works.forEach(work => {
         const figure = document.createElement("figure")
         figure.id = work.id
