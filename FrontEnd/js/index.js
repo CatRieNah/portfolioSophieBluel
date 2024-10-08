@@ -44,25 +44,25 @@ function createFigureGallery(work){
 }
 displayWorks(gallery)
 // Récupération des catégories via les données récues, j'ai fais pour apprehender l'utilsation de set 
-/*async function getCategories() {
+/*export async function getCategories() {
     const works = await getWorks()
     const setCat = new Set()
     const categories = []
+
+    // Ajouter uniquement les IDs dans le set pour éliminer les doublons
     works.forEach(work => {
-        const categoriesName = work.category.name
-        const categoriesId = work.category.id
-        setCat.add(categoriesId)
-        setCat.add(categoriesName)
+        setCat.add(work.category.id)
     })
-    const arrayCat = [...setCat]
-    for(let i =0; i< arrayCat.length; i+=2){
-        const id = arrayCat[i]
-        const name = arrayCat[i+1]
+
+    // Ensuite, itérer sur les works pour ajouter uniquement les catégories non-duplicatées
+    setCat.forEach(id => {
+        const category = works.find(work => work.category.id === id)
         categories.push({
-            id: id,
-            name: name
+            id: category.category.id,
+            name: category.category.name
         })
-    }
+    })
+
     return categories
 }*/
 // Récupération de catégories via API
@@ -129,6 +129,7 @@ function connectingUsers(){
         document.querySelector(".edit").style.display = "flex"
         document.querySelector("nav li:nth-child(3)").textContent = "logout"
         document.querySelector(".modif").style.display = "flex"
+        document.querySelector("#portfolio ul").style.display = "none"
         document.querySelector("nav li:nth-child(3)").addEventListener("click",()=>{
             window.localStorage.removeItem("token");
             window.location.href = "./login/login.html"

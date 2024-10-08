@@ -60,6 +60,7 @@ modifEvent.addEventListener("click",()=>{
 })
 async function createOptionsSelect() {
     const categories = await getCategories()
+    console.log(categories)
     categories.forEach(category => {
         const option = document.createElement("option")
         option.value = category.id
@@ -110,22 +111,26 @@ async function deleteWorks(){
 deleteWorks()
 document.addEventListener("DOMContentLoaded", function() {
     // Sélectionner le champ de fichier
-    const inputFile = document.querySelector(".add_gallery input[type='file']")
+    const inputFile = document.querySelector(".add_gallery input[type='file']");
 
-    // Ajouter l'événement change pour le champ de fichier
-    inputFile.addEventListener("change", insertImages);
+    // Vérification de l'existence de l'input de fichier
+    if (inputFile) {
+        inputFile.addEventListener("change", insertImages);
+    } else {
+        console.error("Input file not found!");
+    }
 });
 
 // Définir la fonction insertImages en dehors de DOMContentLoaded pour la rendre accessible
 function insertImages() {
     const inputFile = document.querySelector(".add_gallery input[type='file']");
-    const files = inputFile.files; // Récupérer tous les fichiers sélectionnés
+    const files = inputFile ? inputFile.files : []; // Récupérer tous les fichiers sélectionnés
 
     if (files.length > 0) {
         // Parcourir tous les fichiers sélectionnés
         for (let i = 0; i < files.length; i++) {
             const file = files[i]; // Fichier actuel
-            const reader = new FileReader() // Créer un nouveau FileReader pour chaque fichier
+            const reader = new FileReader(); // Créer un nouveau FileReader pour chaque fichier
 
             // Lorsqu'un fichier est chargé
             reader.onload = function(event) {
@@ -136,7 +141,11 @@ function insertImages() {
 
                 // Ajouter l'image à la galerie
                 const gallery = document.querySelector(".add_gallery");
-                gallery.appendChild(image)
+                if (gallery) {
+                    gallery.appendChild(image);
+                } else {
+                    console.error("Gallery element not found!");
+                }
             };
 
             // Lire le fichier sélectionné
@@ -144,88 +153,118 @@ function insertImages() {
         }
 
         // Cacher les éléments inutiles après la sélection
-        document.querySelector(".fa-image").style.display = "none"
-        document.querySelector(".add_gallery label").style.display = "none"
-        document.querySelector(".add_gallery input[type='file']").style.display = "none";
-        document.querySelector(".add_gallery p").style.display = "none"
+        const imageIcon = document.querySelector(".fa-image");
+        const label = document.querySelector(".add_gallery label");
+        const fileInput = document.querySelector(".add_gallery input[type='file']");
+        const p = document.querySelector(".add_gallery p");
+
+        if (imageIcon) imageIcon.style.display = "none";
+        if (label) label.style.display = "none";
+        if (fileInput) fileInput.style.display = "none";
+        if (p) p.style.display = "none";
     }
 }
 
-//Envoi formulaire ajout photo
-const titleInput = document.getElementById("title")
-const categoryInput = document.getElementById("category")
-const imageInput = document.getElementById("image") 
-const formUpload = document.querySelector(".upload_gallery form")
+// Envoi formulaire ajout photo
+const titleInput = document.getElementById("title");
+const categoryInput = document.getElementById("category");
+const imageInput = document.getElementById("image"); 
+const formUpload = document.querySelector(".upload_gallery form");
 
 formUpload.addEventListener("submit", (event) => {
-    event.preventDefault()
-    checkFields()
-    addPicture()
+    event.preventDefault();
+    checkFields();
+    addPicture();
 });
 
 async function addPicture() {
     try {
-        const formData = new FormData(formUpload)
-        const title = titleInput.value
-        const category = categoryInput.value
-        const image = imageInput.files.length
+        const formData = new FormData(formUpload);
+        const title = titleInput.value;
+        const category = categoryInput.value;
+        const image = imageInput.files.length;
         if (title && category && image) {
             const response = await fetch("http://localhost:5678/api/works", {
                 method: "POST",
                 headers: {"Authorization": `Bearer ${token}`},
                 body: formData
-            })
+            });
             if (response.ok) {
-                const data = await response.json()
-                console.log(data)
-                document.querySelector(".add_gallery").innerHTML = ""
-                displayGalleryModal()
-                displayWorks()
-                resetForm()
+                const data = await response.json();
+                console.log(data);
+                const addGallery = document.querySelector(".add_gallery");
+                if (addGallery) {
+                    addGallery.innerHTML = "";
+                } else {
+                    console.error("Gallery element not found for clearing!");
+                }
+                displayGalleryModal();
+                displayWorks();
+                resetForm();
             } else {
-                throw new Error("Error:" + response.status)
+                throw new Error("Error:" + response.status);
             }
         }
 
     } catch (error) {
-        console.error(error)
+        console.error(error);
     }
 }
 
 // Vérification des champs
 function checkFields() {
-    const title = titleInput.value
-    const category = categoryInput.value
-    const image = imageInput.files.length
+    const title = titleInput.value;
+    const category = categoryInput.value;
+    const image = imageInput.files.length;
+    const submitButton = document.querySelector(".upload_gallery input[type='submit']");
+
     if (title && category && image > 0) {
-        document.querySelector(".upload_gallery input[type='submit']").style.backgroundColor = "#1D6154"
+        if (submitButton) {
+            submitButton.style.backgroundColor = "#1D6154";
+        }
     } else {
-        document.querySelector(".upload_gallery input[type='submit']").style.backgroundColor = ""
+        if (submitButton) {
+            submitButton.style.backgroundColor = "";
+        }
     }
 }
 
-titleInput.addEventListener("input", checkFields)
-categoryInput.addEventListener("input", checkFields)
-imageInput.addEventListener("input", checkFields)
+titleInput.addEventListener("input", checkFields);
+categoryInput.addEventListener("input", checkFields);
+imageInput.addEventListener("input", checkFields);
 
 // Réinitialiser le formulaire
 function resetForm() {
     // Réinitialiser les champs du formulaire
     titleInput.value = "";
     categoryInput.value = "";
-    imageInput.value = ""; // Réinitialiser l'input de fichier
 
-// Réinitialiser la galerie en restaurant les éléments initiaux
-    document.querySelector(".add_gallery").innerHTML = `
-        <span><i class="fa-regular fa-image"></i></span>
-        <label for="image">+ Ajouter photo</label>
-        <input type="file" name="image" id="image" accept="image/png,image/jpeg">
-        <p>jpg, png : 4mo max</p>
-    `;
+    // Réinitialiser l'input de fichier en le recréant
+    const newInputFile = document.createElement("input");
+    newInputFile.type = "file";
+    newInputFile.name = "image";
+    newInputFile.id = "image";
+    newInputFile.accept = "image/png,image/jpeg";
+
+    // Remplacer l'ancien input par le nouveau
+    const addGallery = document.querySelector(".add_gallery");
+    if (addGallery) {
+        addGallery.innerHTML = `
+            <span><i class="fa-regular fa-image"></i></span>
+            <label for="image">+ Ajouter photo</label>
+        `;
+        addGallery.appendChild(newInputFile);
+        newInputFile.addEventListener("change", insertImages);
+    } else {
+        console.error("add_gallery element not found during reset!");
+    }
 
     // Réinitialiser la couleur du bouton de soumission
-    document.querySelector(".upload_gallery input[type='submit']").style.backgroundColor = "";
+    const submitButton = document.querySelector(".upload_gallery input[type='submit']");
+    if (submitButton) {
+        submitButton.style.backgroundColor = "";
+    }
 
-    // Ajouter à nouveau l'événement "change" pour le nouvel input de fichier
-    document.querySelector(".add_gallery input[type='file']").addEventListener("change", insertImages);
+    // Vérifier les champs immédiatement après la réinitialisation
+    checkFields();
 }
